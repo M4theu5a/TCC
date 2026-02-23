@@ -1,3 +1,10 @@
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB)
+![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange)
+![TCC](https://img.shields.io/badge/TCC-Engenharia%20de%20Computação-purple)
+
+
 
 
 🐶 TCC – qual o nome???
