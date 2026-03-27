@@ -1,0 +1,206 @@
+/* ===== Reset & Base ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f0f1a;
+  color: #e0e0e0;
+  min-height: 100vh;
+}
+
+/* ===== App Container ===== */
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.app-header h1 {
+  font-size: 1.8rem;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.app-header p {
+  color: #888;
+  font-size: 0.95rem;
+}
+
+/* ===== Status Badge ===== */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.status-badge.online {
+  background-color: #1a3a2a;
+  color: #4ade80;
+}
+
+.status-badge.offline {
+  background-color: #3a1a1a;
+  color: #f87171;
+}
+
+.status-badge.connecting {
+  background-color: #3a3a1a;
+  color: #facc15;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* ===== Webcam Section ===== */
+.webcam-section {
+  position: relative;
+  background-color: #1a1a2e;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.webcam-video {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+}
+
+.webcam-canvas {
+  display: none;
+}
+
+/* ===== Overlay de Predição ===== */
+.prediction-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prediction-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.prediction-label.EM_PE { color: #4ade80; }
+.prediction-label.SENTADO { color: #60a5fa; }
+.prediction-label.DEITADO { color: #f59e0b; }
+.prediction-label.ERRO { color: #f87171; }
+
+.prediction-confidence {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+/* ===== Métricas ===== */
+.metrics-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  background-color: #1a1a2e;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid #2a2a3e;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* ===== Controles ===== */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-start {
+  background-color: #4ade80;
+  color: #0f0f1a;
+}
+
+.btn-start:hover {
+  background-color: #22c55e;
+}
+
+.btn-stop {
+  background-color: #f87171;
+  color: #0f0f1a;
+}
+
+.btn-stop:hover {
+  background-color: #ef4444;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Mensagem Inicial ===== */
+.webcam-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.webcam-placeholder span {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
