@@ -9,15 +9,14 @@ Passo a passo para rodar o projeto na sua máquina.
 Antes de começar, instale:
 
 1. **Python 3.10+** → [python.org/downloads](https://www.python.org/downloads/)
-2. **Node.js 18+** → [nodejs.org](https://nodejs.org/)
+2. **Bun** → [bun.sh](https://bun.sh/)
 3. **Git** → [git-scm.com](https://git-scm.com/)
 
 Para verificar se está tudo instalado, abra o terminal e rode:
 
 ```bash
 python --version    # deve mostrar 3.10 ou superior
-node --version      # deve mostrar 18 ou superior
-npm --version       # deve mostrar 9 ou superior
+bun --version       # deve mostrar a versão instalada do Bun
 git --version       # deve mostrar qualquer versão
 ```
 
@@ -117,4 +116,4 @@ Frontend: http://localhost:5173
 | "Servidor Offline" no frontend | Verifique se o backend está rodando na porta 8000 |
 | Webcam não abre | Verifique permissões do navegador (cadeado na barra de URL) |
 | Erro ao instalar dependências Python | Certifique-se de estar no ambiente virtual (venv) |
-| `npm run dev` falha | Delete `node_modules` e rode `npm install` novamente |
+| `npm run dev` falha | Delete `node_modules` e rode `bun install` novamente |

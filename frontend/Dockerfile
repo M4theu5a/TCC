@@ -1,12 +1,12 @@
-FROM node:20-slim
+FROM oven/bun:1
 
 WORKDIR /app
 
 COPY package.json .
-RUN npm install
+RUN bun install
 
 COPY . .
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["bun", "run", "dev", "--host"]

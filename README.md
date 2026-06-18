@@ -167,7 +167,7 @@ tcc-dog-posture/
 ### Pré-requisitos
 
 - Python 3.10+
-- Node.js 18+
+- Bun
 - Webcam disponível
 
 ### Backend
@@ -182,8 +182,8 @@ uvicorn main:app --reload --port 8000
 
 ```bash
 cd frontend
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 Abra o navegador em `http://localhost:5173` e **permita o acesso à webcam**.

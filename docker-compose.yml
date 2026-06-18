@@ -19,7 +19,7 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    command: npm run dev -- --host
+    command: bun run dev --host
     working_dir: /app
     depends_on:
       - backend
