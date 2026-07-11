@@ -717,3 +717,145 @@ body {
   margin-left: auto;
   font-size: 0.7rem;
 }
+
+/* ===== Nav item as button (Sobre/Métricas/Configurações/Documentação) ===== */
+button.nav-item {
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: inherit;
+  text-align: left;
+}
+
+/* ===== Section pages ===== */
+.section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.section-text p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.section-text ul {
+  margin: 0 0 10px 18px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.tech-badge {
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.metrics-empty {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 24px 0;
+}
+
+.stat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.stat-table th,
+.stat-table td {
+  text-align: left;
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.confusion-table {
+  border-collapse: collapse;
+  font-size: 0.76rem;
+  margin-top: 4px;
+}
+
+.confusion-table th,
+.confusion-table td {
+  text-align: center;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+}
+
+.confusion-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.68rem;
+}
+
+.confusion-table td.diag {
+  background: #dbeafe;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.settings-row {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-row-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.settings-row-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.settings-slider {
+  width: 100%;
+  accent-color: var(--blue);
+}
+
+.link-list a {
+  display: block;
+  color: var(--blue);
+  font-size: 0.85rem;
+  text-decoration: none;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.link-list a:last-child {
+  border-bottom: none;
+}

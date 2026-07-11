@@ -8,8 +8,8 @@
 
 import axios from 'axios';
 
-// URL base do backend
-const API_BASE_URL = 'http://localhost:8000';
+// URL base do backend (configurável via VITE_API_URL, ex: para Docker/deploy)
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -52,6 +52,22 @@ export async function predictFrame(imageBlob) {
       confidence: 0,
       latency_ms: 0,
     };
+  }
+}
+
+/**
+ * Busca as métricas de avaliação do modelo treinado (acurácia, F1 por
+ * classe, matriz de confusão, latência), geradas por
+ * backend/training/evaluate.py.
+ * @returns {Promise<{available: boolean}>}
+ */
+export async function getMetrics() {
+  try {
+    const response = await api.get('/metrics');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar métricas:', error);
+    return { available: false };
   }
 }
 

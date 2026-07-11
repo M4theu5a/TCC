@@ -1,7 +1,19 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import WebcamCapture from "./components/WebcamCapture";
 import MetricsPanel from "./components/MetricsPanel";
+import AboutSection from "./components/AboutSection";
+import MetricsSection from "./components/MetricsSection";
+import SettingsSection from "./components/SettingsSection";
+import DocumentationSection from "./components/DocumentationSection";
 import { checkHealth, predictFrame } from "./services/api";
+
+const NAV_ITEMS = [
+  { id: "dashboard", icon: "⊞", label: "Dashboard" },
+  { id: "about", icon: "📋", label: "Sobre o Projeto" },
+  { id: "metrics", icon: "📊", label: "Métricas" },
+  { id: "settings", icon: "⚙️", label: "Configurações" },
+  { id: "docs", icon: "📄", label: "Documentação" },
+];
 
 const LABEL_CONFIG = {
   EM_PE:   { label: "EM PÉ",   color: "#16a34a", bg: "#dcfce7" },
@@ -28,8 +40,13 @@ const PIPELINE = [
 ];
 
 function App() {
+  const [activeSection, setActiveSection] = useState("dashboard");
+  const [captureFps, setCaptureFps]   = useState(
+    () => Number(localStorage.getItem("captureFps")) || 5
+  );
   const [isRunning, setIsRunning]     = useState(false);
   const [serverStatus, setServerStatus] = useState("connecting");
+  const [modelType, setModelType]     = useState(null);
   const [prediction, setPrediction]   = useState(null);
   const [latency, setLatency]         = useState(0);
   const [fps, setFps]                 = useState(0);
@@ -53,6 +70,7 @@ function App() {
     const check = async () => {
       const health = await checkHealth();
       setServerStatus(health.status === "online" ? "online" : "offline");
+      setModelType(health.model_type || null);
     };
     check();
     const id = setInterval(check, 10000);
@@ -130,6 +148,11 @@ function App() {
     setConfidence(0);
   };
 
+  const handleChangeCaptureFps = (value) => {
+    setCaptureFps(value);
+    localStorage.setItem("captureFps", String(value));
+  };
+
   const currentCfg = prediction && LABEL_CONFIG[prediction.label];
 
   const statusText = {
@@ -151,17 +174,16 @@ function App() {
         </div>
 
         <nav className="sidebar-nav">
-          {[
-            { icon: "⊞", label: "Dashboard",      active: true },
-            { icon: "📋", label: "Sobre o Projeto" },
-            { icon: "📊", label: "Métricas" },
-            { icon: "⚙️", label: "Configurações" },
-            { icon: "📄", label: "Documentação" },
-          ].map((item) => (
-            <a key={item.label} href="#" className={`nav-item${item.active ? " active" : ""}`}>
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setActiveSection(item.id)}
+              className={`nav-item${activeSection === item.id ? " active" : ""}`}
+            >
               <span className="nav-icon">{item.icon}</span>
               {item.label}
-            </a>
+            </button>
           ))}
         </nav>
 
@@ -180,9 +202,13 @@ function App() {
           </div>
           <div className="status-row">
             <span>Modelo de IA</span>
-            <span className="tag-loaded">
+            <span className={modelType === "modelo_treinado" ? "tag-loaded" : "tag-offline"}>
               <span className="dot" />
-              Carregado
+              {modelType === "modelo_treinado"
+                ? "Treinado"
+                : modelType === "stub (simulado)"
+                ? "Modo Stub"
+                : "—"}
             </span>
           </div>
         </div>
@@ -215,6 +241,14 @@ function App() {
         </div>
 
         {/* Content */}
+        {activeSection === "about" && <AboutSection />}
+        {activeSection === "metrics" && <MetricsSection />}
+        {activeSection === "settings" && (
+          <SettingsSection captureFps={captureFps} onChangeCaptureFps={handleChangeCaptureFps} />
+        )}
+        {activeSection === "docs" && <DocumentationSection />}
+
+        {activeSection === "dashboard" && (
         <div className="content-grid">
           {/* ── Left column ── */}
           <div className="left-col">
@@ -229,7 +263,7 @@ function App() {
               <WebcamCapture
                 isRunning={isRunning}
                 onFrame={handleFrame}
-                fps={5}
+                fps={captureFps}
                 prediction={prediction}
                 latency={latency}
                 currentFps={fps}
@@ -374,6 +408,7 @@ function App() {
             </div>
           </div>
         </div>
+        )}
       </main>
     </div>
   );

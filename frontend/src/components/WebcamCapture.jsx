@@ -1,5 +1,11 @@
 import { useRef, useEffect, useCallback } from 'react';
 
+const LABELS_PT = {
+  EM_PE: 'Em Pé',
+  SENTADO: 'Sentado',
+  DEITADO: 'Deitado',
+};
+
 function WebcamCapture({ isRunning, onFrame, fps = 5, prediction, latency, currentFps, onStart, serverStatus }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -58,7 +64,7 @@ function WebcamCapture({ isRunning, onFrame, fps = 5, prediction, latency, curre
     }
   }, [isRunning, fps, captureFrame, startWebcam, stopWebcam]);
 
-  const hasDog = prediction && prediction.label !== 'ERRO';
+  const hasPrediction = prediction && prediction.label !== 'ERRO';
 
   return (
     <div className="webcam-wrap">
@@ -72,9 +78,9 @@ function WebcamCapture({ isRunning, onFrame, fps = 5, prediction, latency, curre
             AO VIVO
           </div>
 
-          {hasDog && (
+          {hasPrediction && (
             <div className="bounding-box">
-              <span className="bounding-label">CÃO DETECTADO</span>
+              <span className="bounding-label">{LABELS_PT[prediction.label] || prediction.label}</span>
             </div>
           )}
 

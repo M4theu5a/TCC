@@ -1,0 +1,8 @@
+# Dependências exclusivas do pipeline de treino.
+# Não fazem parte da imagem Docker de produção da API
+# (ver backend/requirements.txt).
+
+datasets>=2.20.0
+huggingface_hub>=0.24.0
+scikit-learn>=1.5.0
+matplotlib>=3.9.0

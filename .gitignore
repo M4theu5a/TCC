@@ -29,6 +29,7 @@ backend/models/*.pth
 
 # ===== Datasets =====
 datasets/
+backend/training/data/
 
 # ===== IDE =====
 .vscode/

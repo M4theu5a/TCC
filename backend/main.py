@@ -3,12 +3,17 @@ TCC - Reconhecimento de Postura de Cães
 Backend FastAPI - Servidor principal
 """
 
+import json
+import time
+from contextlib import asynccontextmanager
+from pathlib import Path
+
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-import time
 
 from services.inference_service import InferenceService
+
+METRICS_PATH = Path(__file__).resolve().parent / "models" / "metrics.json"
 
 
 # Inicialização do serviço de inferência
@@ -61,7 +66,7 @@ async def health_check():
 async def predict(file: UploadFile = File(...)):
     """
     Endpoint principal de predição.
-    
+
     Recebe uma imagem (frame da webcam) e retorna:
     - label: classe prevista (EM_PE, SENTADO, DEITADO)
     - confidence: confiança da predição (0.0 a 1.0)
@@ -69,13 +74,12 @@ async def predict(file: UploadFile = File(...)):
     """
     start_time = time.time()
 
-    # Lê os bytes da imagem enviada
-    image_bytes = await file.read()
+    try:
+        image_bytes = await file.read()
+        result = inference_service.predict(image_bytes)
+    except Exception as e:
+        result = {"label": "ERRO", "confidence": 0.0, "error": str(e)}
 
-    # Realiza a inferência
-    result = inference_service.predict(image_bytes)
-
-    # Calcula a latência total
     latency_ms = round((time.time() - start_time) * 1000, 2)
 
     return {
@@ -83,3 +87,19 @@ async def predict(file: UploadFile = File(...)):
         "confidence": result["confidence"],
         "latency_ms": latency_ms,
     }
+
+
+@app.get("/metrics")
+async def get_metrics():
+    """
+    Métricas de avaliação do modelo treinado, geradas por
+    backend/training/evaluate.py no split de teste (held-out): acurácia,
+    precisão/recall/F1 por classe, matriz de confusão e latência média.
+    """
+    if not METRICS_PATH.exists():
+        return {"available": False}
+
+    with open(METRICS_PATH, "r", encoding="utf-8") as f:
+        metrics = json.load(f)
+
+    return {"available": True, **metrics}

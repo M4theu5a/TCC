@@ -54,8 +54,8 @@ Desenvolver e avaliar uma aplicação web capaz de reconhecer posturas de cães 
 
 - [x] Capturar imagens via webcam em tempo real
 - [ ] Detectar a presença do cão no frame
-- [ ] Classificar a postura em três classes (Em Pé, Sentado, Deitado)
-- [ ] Medir desempenho com acurácia, F1-score, latência e FPS
+- [x] Classificar a postura em três classes (Em Pé, Sentado, Deitado)
+- [x] Medir desempenho com acurácia, F1-score, latência e FPS
 - [ ] Avaliar robustez em diferentes condições de iluminação e fundo
 
 ---
@@ -140,9 +140,16 @@ Imagem  →  Pré-processamento  →  Detecção do Cão  →  Classificação  
 tcc-dog-posture/
 │
 ├── backend/
-│   ├── main.py              # Entrypoint FastAPI
-│   ├── inference.py         # Pipeline de inferência
-│   ├── models/              # Pesos do modelo treinado
+│   ├── main.py                       # Entrypoint FastAPI
+│   ├── services/
+│   │   ├── inference_service.py      # Orquestra pré-processamento + inferência
+│   │   ├── model_arch.py             # Arquitetura do modelo (compartilhada com o treino)
+│   │   └── preprocessing.py          # Transforms (compartilhados com o treino)
+│   ├── training/                     # Pipeline offline de treino/avaliação
+│   │   ├── dataset.py
+│   │   ├── train.py
+│   │   └── evaluate.py
+│   ├── models/                       # Pesos do modelo treinado (.pth, git-ignored)
 │   └── requirements.txt
 │
 ├── frontend/
@@ -194,6 +201,21 @@ Abra o navegador em `http://localhost:5173` e **permita o acesso à webcam**.
 docker-compose up --build
 ```
 
+### Retreinar o modelo
+
+O checkpoint treinado (`backend/models/dog_posture_model.pth`) não é
+versionado no Git (arquivo pesado). Para gerá-lo localmente:
+
+```bash
+cd backend
+pip install -r requirements.txt -r training/requirements.txt
+python training/train.py      # baixa o dataset e treina (leva alguns minutos em CPU)
+python training/evaluate.py   # avalia no conjunto de teste e gera métricas
+```
+
+Sem o checkpoint, o backend cai automaticamente para um modo stub
+(predição simulada) — o `/health` indica isso via `model_type`.
+
 ---
 
 ## 🗺 MVP e Roadmap
@@ -201,14 +223,21 @@ docker-compose up --build
 ### ✅ MVP — Entrega Inicial
 
 - Captura de webcam funcional
-- Envio de frames (~5 FPS) para a API
-- API com predição stub (simulada)
+- Envio de frames (~5 FPS, configurável) para a API
 - Exibição de: classe, confiança, latência e FPS
+
+### ✅ Modelo Real
+
+- Modelo treinado (MobileNetV2 + Transfer Learning) sobre o dataset
+  público [DogPoseCV](https://huggingface.co/datasets/stockeh/dog-pose-cv)
+  — ver [`docs/tcc/metodologia.md`](docs/tcc/metodologia.md) e
+  [`docs/tcc/resultados.md`](docs/tcc/resultados.md)
+- Fallback automático para stub caso o checkpoint não esteja disponível
 
 ### 🔄 Próximas Iterações
 
-- [ ] Modelo real treinado com dataset de cães
-- [ ] Detector de cão no frame (pré-filtro)
+- [ ] Detector de cão no frame (pré-filtro, hoje o app assume que o
+      frame contém um cão)
 - [ ] Suavização temporal das predições
 - [ ] Otimização de FPS e latência
 - [ ] Deploy em produção
