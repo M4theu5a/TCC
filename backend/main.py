@@ -4,6 +4,7 @@ Backend FastAPI - Servidor principal
 """
 
 import json
+import sys
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -12,6 +13,12 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 
 from services.inference_service import InferenceService
+
+# O console do Windows usa cp1252 por padrão, que não suporta os emojis
+# usados nos logs abaixo (ex: 🐶). Força UTF-8 para não quebrar o startup.
+if sys.stdout.encoding != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
 
 METRICS_PATH = Path(__file__).resolve().parent / "models" / "metrics.json"
 

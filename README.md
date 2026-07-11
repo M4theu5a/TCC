@@ -246,17 +246,26 @@ Sem o checkpoint, o backend cai automaticamente para um modo stub
 
 ## 📊 Métricas de Avaliação
 
-O projeto será avaliado com as seguintes métricas:
+Resultado real do modelo treinado (MobileNetV2 + Transfer Learning),
+medido no conjunto de teste held-out (1.350 imagens). Detalhes completos,
+matriz de confusão e análise em [`docs/tcc/resultados.md`](docs/tcc/resultados.md).
 
-| Métrica | Meta |
-|---------|------|
-| Acurácia | ≥ 80% em ambiente controlado |
-| F1-score | Avaliado por classe |
-| Latência média | < 150 ms por frame |
-| FPS efetivo | ≥ 5 FPS |
-| Confiança média | ≥ 80% |
+| Métrica | Meta | Resultado real | Status |
+|---------|------|-----------------|--------|
+| Acurácia | ≥ 80% em ambiente controlado | 71,41% | ❌ |
+| F1-score | Avaliado por classe | 71,49% (macro) | ✅ |
+| Latência média | < 150 ms por frame | 19,3 ms | ✅ |
+| FPS efetivo | ≥ 5 FPS | 51,9 FPS | ✅ |
+| Confiança média | ≥ 80% | 70,46% | ❌ |
 
-Além disso, serão geradas: **matriz de confusão**, curvas de **Precisão/Recall** e análise de robustez em diferentes condições de iluminação e fundo.
+A acurácia e a confiança média ficaram abaixo da meta original — os
+números não foram ajustados para parecer melhores. As hipóteses para essa
+diferença (backbone congelada, ambiguidade de rótulos, poucas épocas,
+ausência de detector de presença do cão) estão discutidas em
+[`docs/tcc/resultados.md`](docs/tcc/resultados.md#análise-e-hipóteses-para-a-diferença-em-relação-à-meta).
+
+Ainda não avaliados nesta rodada: curvas de Precisão/Recall e análise de
+robustez em diferentes condições de iluminação e fundo (roadmap).
 
 ---
 

@@ -41,7 +41,7 @@ function MetricsSection() {
     );
   }
 
-  const { classes, accuracy, per_class, macro_avg_f1, mean_latency_ms, effective_fps, test_set_size, confusion_matrix } = metrics;
+  const { classes, accuracy, per_class, macro_avg_f1, mean_latency_ms, effective_fps, mean_confidence, test_set_size, confusion_matrix } = metrics;
 
   return (
     <div className="section-grid">
@@ -56,6 +56,10 @@ function MetricsSection() {
             <tr>
               <td>F1-score (macro)</td>
               <td>{(macro_avg_f1 * 100).toFixed(1)}%</td>
+            </tr>
+            <tr>
+              <td>Confiança média</td>
+              <td>{(mean_confidence * 100).toFixed(1)}%</td>
             </tr>
             <tr>
               <td>Latência média</td>

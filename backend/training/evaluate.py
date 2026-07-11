@@ -48,7 +48,7 @@ def _load_model(device) -> torch.nn.Module:
 
 
 def _collect_predictions(model, loader, device):
-    all_labels, all_preds = [], []
+    all_labels, all_preds, all_confidences = [], [], []
     latencies_ms = []
 
     with torch.no_grad():
@@ -58,11 +58,13 @@ def _collect_predictions(model, loader, device):
                 start = time.perf_counter()
                 output = model(single)
                 latencies_ms.append((time.perf_counter() - start) * 1000)
-                pred = output.argmax(dim=1).item()
-                all_preds.append(pred)
+                probabilities = torch.nn.functional.softmax(output, dim=1)
+                confidence, pred = torch.max(probabilities, 1)
+                all_preds.append(pred.item())
+                all_confidences.append(confidence.item())
                 all_labels.append(labels[i].item())
 
-    return all_labels, all_preds, latencies_ms
+    return all_labels, all_preds, all_confidences, latencies_ms
 
 
 def main():
@@ -74,7 +76,7 @@ def main():
     test_loader = DataLoader(test_ds, batch_size=32, shuffle=False, num_workers=4)
 
     print(f"Avaliando em {len(test_ds)} imagens de teste...")
-    y_true, y_pred, latencies_ms = _collect_predictions(model, test_loader, device)
+    y_true, y_pred, confidences, latencies_ms = _collect_predictions(model, test_loader, device)
 
     report_dict = classification_report(y_true, y_pred, target_names=CLASSES, output_dict=True, zero_division=0)
     report_text = classification_report(y_true, y_pred, target_names=CLASSES, zero_division=0)
@@ -83,6 +85,7 @@ def main():
     accuracy = report_dict["accuracy"]
     mean_latency_ms = sum(latencies_ms) / len(latencies_ms)
     effective_fps = 1000.0 / mean_latency_ms if mean_latency_ms > 0 else 0.0
+    mean_confidence = sum(confidences) / len(confidences)
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -114,11 +117,15 @@ def main():
         "confusion_matrix": cm.tolist(),
         "mean_latency_ms": mean_latency_ms,
         "effective_fps": effective_fps,
+        "mean_confidence": mean_confidence,
     }
     METRICS_JSON_PATH.write_text(json.dumps(metrics, indent=2, ensure_ascii=False), encoding="utf-8")
 
     print(report_text)
-    print(f"Acuracia: {accuracy:.4f} | Latencia media: {mean_latency_ms:.1f}ms | FPS efetivo: {effective_fps:.1f}")
+    print(
+        f"Acuracia: {accuracy:.4f} | Confianca media: {mean_confidence:.4f} "
+        f"| Latencia media: {mean_latency_ms:.1f}ms | FPS efetivo: {effective_fps:.1f}"
+    )
     print(f"\nArtefatos salvos em:\n  {METRICS_JSON_PATH}\n  {RESULTS_DIR / 'confusion_matrix.png'}\n  {RESULTS_DIR / 'classification_report.txt'}")
 
 

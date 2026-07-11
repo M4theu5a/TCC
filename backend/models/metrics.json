@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-11T21:57:34.716988+00:00",
+  "classes": [
+    "EM_PE",
+    "SENTADO",
+    "DEITADO"
+  ],
+  "test_set_size": 1350,
+  "accuracy": 0.7140740740740741,
+  "per_class": {
+    "EM_PE": {
+      "precision": 0.7941176470588235,
+      "recall": 0.72,
+      "f1_score": 0.7552447552447552,
+      "support": 450.0
+    },
+    "SENTADO": {
+      "precision": 0.6495726495726496,
+      "recall": 0.6755555555555556,
+      "f1_score": 0.6623093681917211,
+      "support": 450.0
+    },
+    "DEITADO": {
+      "precision": 0.7088607594936709,
+      "recall": 0.7466666666666667,
+      "f1_score": 0.7272727272727273,
+      "support": 450.0
+    }
+  },
+  "macro_avg_f1": 0.7149422835697345,
+  "confusion_matrix": [
+    [
+      324,
+      80,
+      46
+    ],
+    [
+      54,
+      304,
+      92
+    ],
+    [
+      30,
+      84,
+      336
+    ]
+  ],
+  "mean_latency_ms": 19.2797877036975,
+  "effective_fps": 51.86779104461917,
+  "mean_confidence": 0.7045888680881924
+}
